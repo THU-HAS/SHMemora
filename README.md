@@ -1,4 +1,4 @@
-# SHMemora: Protective Shared Memory Key-Value Store
+# SHMemora: Protective Key-Value Store on Distributed Shared Memory
 
 **SHMemora** is a high-performance and **secure in-memory key-value store (IMKVS)** built for **multi-host systems using CXL-based Distributed Shared Memory (DSM)**. Unlike traditional KV store systems that suffer from high latency and security limitations, SHMemora introduces a **lightweight protection mechanism** and **capability-based access control** to achieve strong isolation and fine-grained permissions with minimal overhead.
 

@@ -6,7 +6,7 @@
 
 ## Key Features
 
-- **CXL-based Peer-to-Peer Shared Memory**: Enables multiple hosts to directly load/store to a common shared memory pool via CXL 2.0.
+- **CXL Shared Memory**: Enables multiple hosts to directly load/store to a common shared memory pool via CXL 2.0.
 - **Memory Protection with Intel MPK**: Enforces memory access through protected paths only.
 - **Unforgeable Capability Tokens**: Memory regions are protected by cryptographically authenticated tokens using HMAC.
 - **Partitioned Memory Layout**: Data segments are partitioned by host to improve scalability.

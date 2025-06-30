@@ -40,7 +40,7 @@ SHMemora/
 │   ├── gshmp.o, etc.       # Object files for each source module
 │   └── key-token.log       # Optional log for key-token mapping
 
-├── workload/               # YCSB workload specifications (A/B/C/D supported)
+├── workload/               # YCSB workload specifications (A/B/C/D supported) (optional)
 │   ├── workloada.spec_*    # Workload A specification (load/transaction: read & write)
 │   └── workload*.spec_*    # Other workload specifications (e.g., pure read, update-heavy)
 

@@ -73,7 +73,7 @@ You can run the KV benchmark with different parameters:
 ```
 bash
 
-./build/kv <nthreads> <value_size> <use_batch> <batch_kvs>
+./build/kv <nthreads> <value_size> <use_batch> <batch_kvs> <use_mac>
 ```
 
 Example:
@@ -81,7 +81,7 @@ Example:
 ```
 bash
 
-./build/kv 32 256 1 5
+./build/kv 32 256 1 5 0
 ```
 
 

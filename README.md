@@ -41,7 +41,7 @@ SHMemora/
 │   └── key-token.log       # Optional log for key-token mapping
 
 ├── workload/               # YCSB workload specifications (A/B/C/D supported) (optional)
-│   ├── workloada.spec_*    # Workload A specification (load/transaction: read & write)
+│   ├── workload*.spec_*    # Workload A specification (load/transaction: read & write)
 │   └── workload*.spec_*    # Other workload specifications (e.g., pure read, update-heavy)
 
 ├── Makefile                # Build script to compile all core modules

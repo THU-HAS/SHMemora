@@ -8,7 +8,7 @@
 
 - **CXL Shared Memory**: Enables multiple hosts to directly load/store to a common shared memory pool via CXL 2.0.
 - **Memory Protection**: Enforces memory access through protected paths only.
-- **Unforgeable Capability Tokens**: Memory regions are protected by cryptographically authenticated tokens using HMAC.
+- **Unforgeable Capability Tokens**: Memory regions are protected by cryptographically authenticated tokens using HMAC. 
 - **Partitioned Memory Layout**: Data segments are partitioned by host to improve scalability.
 - **End-to-End Security Proofs and Penetration Tests**: Protection model verified both formally and experimentally.
 

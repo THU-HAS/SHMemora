@@ -69,15 +69,6 @@ bash
 ./build/kv 32 256 1 5 0
 ```
 
-
-
-## Internals
-
-- Memory regions are accessed and verified using `shkey_t`, which consists of `token_id` and `HMAC`.
-- A hash table validates access permissions before any memory read/write.
-- Uses `clflush` + `mfence` to ensure persistence and avoid cache inconsistencies when necessary.
-- Lock-free operations such as `CAS` improve performance under contention.
-
 ------
 
 ## Security Guarantee

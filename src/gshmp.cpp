@@ -595,6 +595,46 @@ int gshm::compare_cxl(size_t offset, size_t size, const void *buf, shkey_t shkey
     return result;
 }
 
+
+int gshm::revoke_cxl(shkey_t shkey) {
+    size_t hash_index = hash_function(shkey);
+    size_t original_index = hash_index;
+    size_t probe_count = 0;
+
+ 
+    while (protection_table[hash_index].valid && protection_table[hash_index].shkey != shkey && shkey != global_key) {
+        hash_index = (hash_index + 1) % HASH_TABLE_SIZE;
+        probe_count++;
+
+        if (probe_count > HASH_TABLE_SIZE) {
+            fprintf(stderr, "[revoke_cxl] ERROR: Hash table full or infinite loop\n");
+            return -1;
+        }
+        if (hash_index == original_index) {
+            fprintf(stderr, "[revoke_cxl] ERROR: Invalid or missing shkey\n");
+            return -1;
+        }
+    }
+
+    HashEntry &Hentry = protection_table[hash_index];
+
+
+    if ((!Hentry.valid || Hentry.shkey != shkey) && shkey != global_key) {
+        fprintf(stderr, "[revoke_cxl] ERROR: No matching entry found\n");
+        return -1;
+    }
+
+
+    Hentry.valid = false;
+
+    // optional
+    // memset(&Hentry.Pentry, 0, sizeof(ProtectionEntry));
+    // Hentry.shkey = 0;
+
+    //fprintf(stdout, "[revoke_cxl] SUCCESS: Entry with shkey 0x%lx revoked\n", shkey);
+    return 0;
+}
+
 shkey_t gshm::acquire(size_t offset, size_t size, uint8_t permission) {
     shkey_t shkey = generate_shkey();
     //timing_stats.reset();

@@ -74,15 +74,6 @@ bash
 
 - use_mac: Enable token HMAC verification (1 for enabled, 0 for disabled)
 
-------
-
-## Security Guarantee
-
-SHMemora enforces strong memory isolation through a formally defined and tested security model, which:
-
-- Prevents capability **token forgery** using HMAC authentication
-- Detects and blocks **metadata tampering**
-- Blocks **out-of-bounds memory access**
 
 
 

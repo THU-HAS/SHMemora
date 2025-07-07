@@ -185,6 +185,7 @@ class gshm {
         int read_cxl(size_t offset, size_t size, void *buf, shkey_t shkey);
         int write_cxl(size_t offset, size_t size, const void *buf, shkey_t shkey);
         int compare_cxl(size_t offset, size_t size, const void *buf, shkey_t shkey);
+        int revoke_cxl(shkey_t shkey);
         int close_cxl_device();
 
 

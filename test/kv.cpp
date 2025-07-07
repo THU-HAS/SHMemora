@@ -48,7 +48,6 @@ void record_shkey_mapping(const std::string& log_file, const uint8_t* key, shkey
         return;
     }
 
-    // 将 key 前缀转为字符串（最多直到 '\0' 或 63 个字符）
     std::string key_str(reinterpret_cast<const char*>(key), strnlen(reinterpret_cast<const char*>(key), 64));
 
     ofs << key_str << " " << std::hex << shkey << "\n";
@@ -158,7 +157,7 @@ extern "C" void * worker (void * arg)
 
 
         load_cycle++;
-        if (load_cycle == 500000) { // 每 10 万条记录清除一次保护表
+        if (load_cycle == 500000) { 
             shm->clear_protection_table();
             load_cycle = 0;
         }

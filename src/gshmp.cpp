@@ -70,14 +70,6 @@ size_t gshm::find_available_slot(shkey_t shkey) {
     return hash_index;
 }
 
-// int gshm::insert_protection_entry(shkey_t shkey, size_t offset, size_t size, int permission) {
-//     size_t hash_index = find_available_slot(shkey);
-//     protection_table[hash_index].shkey = shkey;
-//     protection_table[hash_index].Pentry = {offset, size, permission};
-//     protection_table[hash_index].valid = true;
-//     return 0;
-// }
-
 int gshm::insert_protection_entry(shkey_t shkey, size_t offset, size_t size, int permission) {
     size_t hash_index = hash_function(shkey);
     size_t original_index = hash_index;
@@ -381,54 +373,6 @@ bool gshm::put(uint8_t* key, uint8_t* value) {
     return true;
 }
 
-
-// bool gshm::put(uint8_t* key, uint8_t* value) {
-//     uint64_t partition_id = (reinterpret_cast<uint64_t*>(key)[0] >> 56);
-//     uint64_t hash_offset = reinterpret_cast<uint64_t*>(key)[0] & ((ZU(1) << 17) - 1);
-//     uint64_t entry_offset = KV_HASH_TABLE_START + partition_id * KV_HASH_TABLE_SIZE + hash_offset * sizeof(uint64_t);
-//     shkey_t sk_hash = acquire(entry_offset, sizeof(uint64_t), 3);
-
-//     size_t partition_start = DATA_SEG_START + host_id * DATA_PARTITION_SIZE;
-//     size_t partition_end = partition_start + DATA_PARTITION_SIZE;
-
-//     uint64_t entry = 0;
-//     read_cxl(entry_offset, sizeof(uint64_t), &entry, sk_hash);
-
-//     uint64_t prev_entry = 0;
-//     while (entry != 0) {
-//         shkey_t sk_data = acquire(entry, 328, 3);
-//         if (compare_cxl(entry, 64, key, sk_data) == 0) {
-//             write_cxl(entry + 64, 256, value, sk_data);
-//             return true;
-//         }
-//         prev_entry = entry;
-//         read_cxl(entry + 320, sizeof(uint64_t), &entry, sk_data);
-//     }
-
-//     if (*next_free_offset + 328 > partition_end) {
-//         fprintf(stderr, "Partition full\n");
-//         return false;
-//     }
-
-//     shkey_t sk_new = acquire(*next_free_offset, 328, 3);
-//     write_cxl(*next_free_offset, 64, key, sk_new);
-//     write_cxl(*next_free_offset + 64, 256, value, sk_new);
-//     uint64_t zero = 0;
-//     write_cxl(*next_free_offset + 320, sizeof(uint64_t), &zero, sk_new);
-
-//     if (prev_entry == 0) {
-//         
-//         write_cxl(entry_offset, sizeof(uint64_t), next_free_offset, sk_hash);
-//     } else {
-//        
-//         shkey_t sk_prev = acquire(prev_entry, 328, 3);
-//         write_cxl(prev_entry + 320, sizeof(uint64_t), next_free_offset, sk_prev);
-//     }
-
-//     *next_free_offset += 328;
-//     return true;
-// }
-
 bool gshm::del(uint8_t* key, shkey_t shkey) {
     //timing_stats.del_start_stamp();
 
@@ -518,57 +462,6 @@ int gshm::read_cxl(size_t offset, size_t size, void *buf, shkey_t shkey) {
     //timing_stats.print_stats_proportion();
     return 0;
 }
-
-// int gshm::write_cxl(size_t offset, size_t size, const void *buf, shkey_t shkey) {
-//     //timing_stats.reset();
-//     timing_stats.start_stamp();
-
-//     size_t hash_index = hash_function(shkey);
-//     timing_stats.hash_stop_stamp();
-
-//     size_t original_index = hash_index;
-//     while (protection_table[hash_index].valid && protection_table[hash_index].shkey != shkey) {
-//         hash_index = (hash_index + 1) % HASH_TABLE_SIZE;
-//         if (hash_index == original_index) {
-//             fprintf(stderr, "write1 Invalid or missing shkey\n");
-//             return -1;
-//         }
-//     }
-//     timing_stats.collision_stop_stamp();
-
-//     HashEntry &Hentry = protection_table[hash_index];
-//     if (!Hentry.valid || Hentry.shkey != shkey) {
-//         fprintf(stderr, "write2 Invalid or missing shkey\n");
-//         return -1;
-//     }
-
-//     if (Hentry.Pentry.size == 0) {
-//         fprintf(stderr, "Invalid memory region for shkey\n");
-//         return -1;
-//     }
-
-//     if (offset < Hentry.Pentry.offset || offset + size > Hentry.Pentry.offset + Hentry.Pentry.size) {
-//         //fprintf(stderr, "Access out of bounds\n");
-//         return -1;
-//     }
-
-//     if ((Hentry.Pentry.permission & 2) == 0) { // Check write permission
-//         fprintf(stderr, "Write access denied\n");
-//         return -1;
-//     }
-//     timing_stats.permission_check_stop_stamp();
-//     //memcpy(this->get_data_vaddr_by_offset(offset), buf, size);
-//     char *dest = static_cast<char *>(this->get_data_vaddr_by_offset(offset));
-//     const char *src = static_cast<const char *>(buf);
-//     for (size_t i = 0; i < size; ++i) {
-//         dest[i] = src[i];
-//     }
-
-//     timing_stats.data_access_stop_stamp();
-//     //timing_stats.print_stats();
-//     //timing_stats.print_stats_proportion();
-//     return 0;
-// }
 
 int gshm::write_cxl(size_t offset, size_t size, const void *buf, shkey_t shkey) {
     //printf("[write_cxl] offset = %lu, size = %lu, shkey = 0x%lx\n", offset, size, shkey);
@@ -724,6 +617,3 @@ void gshm::clear_protection_table() {
     }
     //printf("[Init] Protection table cleared.\n");
 }
-
-
-

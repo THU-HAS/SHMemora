@@ -33,7 +33,7 @@ SHMemora/
 │   ├── kv.cpp              # Benchmark driver for IMKVS operations
 ```
 
-## Setup & Compilation
+## Setup & Run
 
 ### Prerequisites
 
